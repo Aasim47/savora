@@ -26,18 +26,16 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "http://10.59.50.198:3000", 
+  "http://192.168.1.8:3000",
   "http://192.168.31.21:3000",
   "http://10.222.26.198:3000",
-  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL?.replace(/\/$/, ""), // remove trailing slash
 ].filter(Boolean) as string[];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Web-only API using Bearer tokens: strictly enforce explicitly listed origins.
-    // We do not allow undefined origins (!origin) to prevent non-browser clients (like Postman or cURL)
-    // from bypassing CORS when they shouldn't, ensuring tighter perimeter security.
-    if (origin && allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (like mobile apps, curl, or Render health checks)
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
