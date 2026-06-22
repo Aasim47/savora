@@ -1,0 +1,211 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+enum OrderStatus {
+  PENDING
+  ACCEPTED
+  PREPARING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id       String  @id @default(uuid())
+  email    String  @unique
+  password String?
+  name     String
+  phone    String?
+  role     Role    @default(CUSTOMER)
+
+  orders  Order[]
+  carts   Cart[]
+  reviews Review[]
+
+  createdAt DateTime @default(now())
+}
+
+model Restaurant {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+  imageUrl    String?
+
+  phone   String?
+  address String?
+
+  openingTime String?
+  closingTime String?
+
+  isActive Boolean @default(true)
+
+  fssaiLicenseNumber String?
+  gstNumber          String?
+  legalBusinessName  String?
+  registeredAddress  String?
+
+  categories Category[]
+  menuItems  MenuItem[]
+  orders     Order[]
+  reviews    Review[]
+  promoCodes PromoCode[]
+
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id           String @id @default(uuid())
+  restaurantId String
+  name         String
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+  menuItems  MenuItem[]
+
+  createdAt DateTime @default(now())
+
+  @@index([restaurantId])
+}
+
+model MenuItem {
+  id           String  @id @default(uuid())
+  restaurantId String
+  categoryId   String
+  name         String
+  description  String?
+  portionSize  String?
+  price        Float
+  imageUrl     String?
+  available    Boolean @default(true)
+
+  restaurant Restaurant  @relation(fields: [restaurantId], references: [id])
+  category   Category    @relation(fields: [categoryId], references: [id])
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+
+  @@index([restaurantId])
+  @@index([categoryId])
+}
+
+model Cart {
+  id     String @id @default(uuid())
+  userId String
+
+  user  User       @relation(fields: [userId], references: [id])
+  items CartItem[]
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model CartItem {
+  id         String @id @default(uuid())
+  cartId     String
+  menuItemId String
+  quantity   Int
+
+  cart     Cart     @relation(fields: [cartId], references: [id])
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@index([cartId])
+  @@index([menuItemId])
+}
+
+model Order {
+  id           String     @id @default(uuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+
+  totalAmount      Float
+  deliveryDistance Float?
+  deliveryFee      Float       @default(0)
+  discountAmount   Float       @default(0)
+  status           OrderStatus @default(PENDING)
+  paymentStatus    String      @default("PENDING")
+  deliveryAddress  String?
+  customerName     String?
+  customerPhone    String?
+
+  promoCodeId String?
+  promoCode   PromoCode? @relation(fields: [promoCodeId], references: [id])
+
+  restaurantFssaiNumber       String?
+  restaurantGstNumber         String?
+  restaurantLegalName         String?
+  restaurantRegisteredAddress String?
+
+  items     OrderItem[]
+  review    Review?
+  createdAt DateTime    @default(now())
+
+  @@index([userId])
+  @@index([restaurantId])
+}
+
+model OrderItem {
+  id         String @id @default(uuid())
+  orderId    String
+  menuItemId String
+  quantity   Int
+  unitPrice  Float
+
+  order    Order    @relation(fields: [orderId], references: [id])
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@index([orderId])
+  @@index([menuItemId])
+}
+
+model Review {
+  id           String @id @default(uuid())
+  orderId      String @unique
+  userId       String
+  restaurantId String
+
+  rating  Int
+  comment String?
+
+  order      Order      @relation(fields: [orderId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FLAT
+}
+
+model PromoCode {
+  id             String       @id @default(uuid())
+  code           String       @unique
+  discountType   DiscountType
+  discountValue  Float
+  minOrderAmount Float?
+  maxUses        Int?
+  usedCount      Int          @default(0)
+  isActive       Boolean      @default(true)
+  expiresAt      DateTime?
+
+  restaurantId String?
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+
+  orders    Order[]
+  createdAt DateTime @default(now())
+}

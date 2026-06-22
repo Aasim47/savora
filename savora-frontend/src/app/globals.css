@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  --color-base: var(--base);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-success: #2D8C4E;
+  --color-error: #C0392B;
+  --color-divider: var(--divider);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, Cambria, serif;
+}
+
+/* Light Mode Defaults */
+:root {
+  --base: #FBF7F0;
+  --surface: #F1E7D8;
+  --card: #FFFFFF;
+  --primary: #2B2A27;
+  --secondary: #7A7468;
+  --accent: #C9622A;
+  --divider: #E5DACB;
+}
+
+/* Dark Mode Overrides */
+.dark {
+  --base: #1C1A17;
+  --surface: #262320;
+  --card: #2E2A26;
+  --primary: #F5EFE6;
+  --secondary: #A89E90;
+  --accent: #E0824A;
+  --divider: #3A352F;
+}
+
+@layer base {
+  body {
+    background-color: var(--base);
+    color: var(--primary);
+    /* Subtle paper-grain texture overlay (light mode only by default, overridden in dark mode below) */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+  }
+  
+  .dark body {
+    background-image: none;
+  }
+
+  /* Autofill Input Styling Overrides */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--base) inset !important;
+    -webkit-text-fill-color: var(--primary) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+}
+
+/* Toast slide-in animation */
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-in.slide-in-from-right {
+  animation: slide-in-from-right 0.3s ease-out forwards;
+}
+
+/* Toast auto-dismiss countdown bar */
+@keyframes toast-countdown {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.toast-progress-bar {
+  animation: toast-countdown var(--toast-duration, 12s) linear forwards;
+}
