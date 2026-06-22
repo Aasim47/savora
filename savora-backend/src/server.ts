@@ -24,12 +24,16 @@ import { initSocket } from "./socket";
 
 const app = express();
 
+const envOrigins = process.env.FRONTEND_URL 
+  ? process.env.FRONTEND_URL.split(",").map(url => url.trim().replace(/\/$/, "")) 
+  : [];
+
 const allowedOrigins = [
   "http://localhost:3000",
   "http://192.168.1.8:3000",
   "http://192.168.31.21:3000",
   "http://10.222.26.198:3000",
-  process.env.FRONTEND_URL?.replace(/\/$/, ""), // remove trailing slash
+  ...envOrigins
 ].filter(Boolean) as string[];
 
 app.use(cors({
