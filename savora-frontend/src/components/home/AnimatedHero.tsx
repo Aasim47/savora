@@ -60,8 +60,8 @@ export function AnimatedHero({
       {/* MOBILE IMAGE HEADER */}
       <div className="sm:hidden relative w-full h-[220px]">
         <img
-          src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&q=80&w=800"
-          alt="Premium food"
+          src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?auto=format&fit=crop&q=80&w=800"
+          alt="Premium Biryani"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
@@ -202,8 +202,8 @@ export function AnimatedHero({
               className="w-full h-full"
             >
               <img
-                src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=800"
-                alt="Exquisite dining"
+                src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&q=80&w=800"
+                alt="Exquisite Biryani"
                 className="w-full h-full object-cover scale-105"
               />
             </motion.div>
