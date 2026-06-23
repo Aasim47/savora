@@ -10,6 +10,9 @@ interface AnimatedHeroProps {
   selectedCategory: string;
   setSelectedCategory: (val: string) => void;
   categories: string[];
+  selectedLocation: string;
+  setSelectedLocation: (val: string) => void;
+  availableLocations: string[];
 }
 
 export function AnimatedHero({
@@ -17,7 +20,10 @@ export function AnimatedHero({
   setSearchQuery,
   selectedCategory,
   setSelectedCategory,
-  categories
+  categories,
+  selectedLocation,
+  setSelectedLocation,
+  availableLocations
 }: AnimatedHeroProps) {
   const { scrollY } = useScroll();
   const yParallax = useTransform(scrollY, [0, 1000], [0, -250]);
@@ -162,25 +168,53 @@ export function AnimatedHero({
             </div>
           </motion.div>
 
-          {/* Category Chips (Glassmorphism) */}
-          <motion.div variants={itemVariants} className="flex overflow-x-auto gap-2.5 pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 w-screen sm:w-full">
-            {categories.map((cat, idx) => (
-              <motion.button
-                key={cat}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.32 + (idx * 0.04), duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-                onClick={() => setSelectedCategory(cat)}
-                className={cn(
-                  "px-5 py-2.5 rounded-full text-[13px] font-medium whitespace-nowrap transition-all outline-none cursor-pointer flex-shrink-0 backdrop-blur-md border",
-                  selectedCategory === cat
-                    ? "bg-accent/90 text-white border-accent/20 shadow-lg"
-                    : "bg-white/30 border-white/50 text-secondary hover:bg-white/50 hover:text-primary shadow-sm"
-                )}
-              >
-                {cat}
-              </motion.button>
-            ))}
+          {/* Filters Area */}
+          <motion.div variants={itemVariants} className="flex flex-col gap-4 pb-2 w-screen sm:w-full -mx-4 px-4 sm:mx-0 sm:px-0">
+            
+            {/* Location Chips */}
+            {availableLocations.length > 1 && (
+              <div className="flex items-center gap-3 w-full">
+                <span className="text-[11px] font-semibold text-secondary uppercase tracking-widest hidden sm:block whitespace-nowrap">Location</span>
+                <div className="flex overflow-x-auto gap-2.5 pb-2 scrollbar-hide w-full">
+                  {availableLocations.map((loc, idx) => (
+                    <button
+                      key={loc}
+                      onClick={() => setSelectedLocation(loc)}
+                      className={cn(
+                        "px-4 py-2 rounded-lg text-[13px] font-medium whitespace-nowrap transition-all outline-none cursor-pointer flex-shrink-0 backdrop-blur-md border",
+                        selectedLocation === loc
+                          ? "bg-primary text-white border-primary shadow-lg"
+                          : "bg-white/40 border-white/60 text-secondary hover:bg-white/60 hover:text-primary shadow-sm"
+                      )}
+                    >
+                      {loc}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Category Chips */}
+            <div className="flex items-center gap-3 w-full">
+              <span className="text-[11px] font-semibold text-secondary uppercase tracking-widest hidden sm:block whitespace-nowrap">Cuisine</span>
+              <div className="flex overflow-x-auto gap-2.5 pb-2 scrollbar-hide w-full">
+                {categories.map((cat, idx) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={cn(
+                      "px-5 py-2.5 rounded-full text-[13px] font-medium whitespace-nowrap transition-all outline-none cursor-pointer flex-shrink-0 backdrop-blur-md border",
+                      selectedCategory === cat
+                        ? "bg-accent/90 text-white border-accent/20 shadow-lg"
+                        : "bg-white/30 border-white/50 text-secondary hover:bg-white/50 hover:text-primary shadow-sm"
+                    )}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
           </motion.div>
 
         </motion.div>

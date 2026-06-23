@@ -3,6 +3,7 @@
 import { Search, Moon, Sun, ShoppingBag, Menu, User, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { StickyCartBar } from "@/components/cart/StickyCartBar";
 import { SearchModal } from "@/components/search/SearchModal";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
@@ -233,6 +234,7 @@ export function Navbar() {
       )}
 
       <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen(false)} />
+      <StickyCartBar isCartOpen={cartOpen} onOpenCart={() => setCartOpen(true)} />
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );

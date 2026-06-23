@@ -32,9 +32,11 @@ export function RestaurantCard({ restaurant, isFeatured }: RestaurantProps) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-90" />
       <div className="absolute top-4 left-4 flex gap-2">
-        <span className="bg-black/40 backdrop-blur-sm text-white/90 text-[10px] uppercase tracking-wider font-medium px-2.5 py-1 rounded-[4px] border border-white/10">
-          {restaurant.cuisine || "Gourmet"}
-        </span>
+        {restaurant.cuisine && (
+          <span className="bg-black/40 backdrop-blur-sm text-white/90 text-[10px] uppercase tracking-wider font-medium px-2.5 py-1 rounded-[4px] border border-white/10">
+            {restaurant.cuisine}
+          </span>
+        )}
         {isOpen ? (
           <span className="bg-[#2F4F3E] text-[#F5EFE6] text-[10px] uppercase tracking-wider font-medium px-2.5 py-1 rounded-[4px] flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse opacity-80" />

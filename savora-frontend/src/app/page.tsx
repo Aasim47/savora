@@ -11,6 +11,8 @@ const CATEGORIES = ["All", "Italian", "Indian", "Asian", "American", "Healthy", 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedLocation, setSelectedLocation] = useState("All");
+  const [availableLocations, setAvailableLocations] = useState<string[]>(["All"]);
 
   return (
     <div className="min-h-screen bg-base pt-[64px]">
@@ -24,6 +26,9 @@ export default function HomePage() {
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           categories={CATEGORIES}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+          availableLocations={availableLocations}
         />
 
         {/* 1px gold separator between Hero and content */}
@@ -36,6 +41,8 @@ export default function HomePage() {
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
             categories={CATEGORIES}
+            selectedLocation={selectedLocation}
+            onLocationsLoaded={(locs) => setAvailableLocations(["All", ...locs])}
           />
         </div>
       </main>

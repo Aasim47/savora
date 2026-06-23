@@ -71,7 +71,7 @@ export default function RestaurantPage() {
   }
 
   const image = restaurant.imageUrl || "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1200&auto=format&fit=crop";
-  const cuisine = restaurant.description ? restaurant.description.substring(0, 15) : "Gourmet";
+  const cuisine = restaurant.description ? restaurant.description.substring(0, 15) : "";
 
   // Filter menu items by search query
   const filterItems = (items: any[]) => {

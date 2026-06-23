@@ -43,7 +43,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-base text-primary">
+      <body className="min-h-full flex flex-col font-sans bg-base text-primary relative">
         <AuthProvider>
           <CustomerNotificationProvider>
             <CartProvider>

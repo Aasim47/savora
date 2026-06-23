@@ -13,6 +13,8 @@ interface RestaurantListProps {
   selectedCategory: string;
   setSelectedCategory: (val: string) => void;
   categories: string[];
+  selectedLocation: string;
+  onLocationsLoaded: (locations: string[]) => void;
 }
 
 export function RestaurantList({
@@ -20,7 +22,9 @@ export function RestaurantList({
   setSearchQuery,
   selectedCategory,
   setSelectedCategory,
-  categories
+  categories,
+  selectedLocation,
+  onLocationsLoaded
 }: RestaurantListProps) {
   const [restaurants, setRestaurants] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -54,6 +58,14 @@ export function RestaurantList({
           };
         });
 
+        // Extract unique locations from address field
+        const locations = Array.from(new Set(
+          withRatings
+            .map((r: any) => r.address?.trim())
+            .filter((addr: string | undefined) => addr && addr.length > 0)
+        )) as string[];
+        
+        onLocationsLoaded(locations);
         setRestaurants(withRatings);
       } catch (error) {
         console.error("Failed to load restaurants", error);
@@ -115,7 +127,7 @@ export function RestaurantList({
   }
 
   // --- Filtering Logic ---
-  const isFiltering = searchQuery.trim().length > 0 || selectedCategory !== "All" || sortBy !== "Recommended";
+  const isFiltering = searchQuery.trim().length > 0 || selectedCategory !== "All" || selectedLocation !== "All" || sortBy !== "Recommended";
 
   // Derive filtered results if search/filter is active
   let filteredRestaurants = restaurants.filter((r) => {
@@ -124,8 +136,11 @@ export function RestaurantList({
 
     const matchesCategory = selectedCategory === "All" ||
       (r.description || "").toLowerCase().includes(selectedCategory.toLowerCase());
+      
+    const matchesLocation = selectedLocation === "All" ||
+      (r.address || "").toLowerCase().includes(selectedLocation.toLowerCase());
 
-    return matchesSearch && matchesCategory;
+    return matchesSearch && matchesCategory && matchesLocation;
   });
 
   // Apply sorting to the filtered grid view
@@ -204,7 +219,7 @@ export function RestaurantList({
                   key={restaurant.id}
                   restaurant={{
                     ...restaurant,
-                    cuisine: restaurant.description ? restaurant.description.substring(0, 15) : "Gourmet"
+                    cuisine: restaurant.description ? restaurant.description.substring(0, 15) : ""
                   }}
                   isFeatured={false}
                 />
