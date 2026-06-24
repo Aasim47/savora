@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 import { MenuRow } from "@/components/menu/MenuRow";
 import { useParams } from "next/navigation";
 import api from "@/lib/axios";
@@ -282,7 +281,6 @@ export default function RestaurantPage() {
           </div>
         )}
       </main>
-      <Footer />
     </div>
   );
 }
