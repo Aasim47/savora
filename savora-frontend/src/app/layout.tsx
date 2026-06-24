@@ -27,10 +27,10 @@ export const metadata: Metadata = {
     description: "Curating the finest culinary experiences and delivering them straight to your door. Order from the best restaurants in your city.",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?auto=format&fit=crop&q=80&w=1200&h=630",
+        url: "https://bhojanwale.in/logo-new.jpg",
         width: 1200,
         height: 630,
-        alt: "Bhojanwale Premium Dining",
+        alt: "Bhojanwale Logo",
       },
     ],
   },
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Bhojanwale | Premium Food Delivery",
     description: "Curating the finest culinary experiences and delivering them straight to your door.",
-    images: ["https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?auto=format&fit=crop&q=80&w=1200&h=630"],
+    images: ["https://bhojanwale.in/logo-new.jpg"],
   },
   robots: {
     index: true,
