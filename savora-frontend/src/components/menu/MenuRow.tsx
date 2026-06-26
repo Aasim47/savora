@@ -19,9 +19,10 @@ interface MenuRowProps {
     imageUrl: string;
     available?: boolean;
   }[];
+  isClosed?: boolean;
 }
 
-export function MenuRow({ items, restaurantId }: MenuRowProps) {
+export function MenuRow({ items, restaurantId, isClosed }: MenuRowProps) {
   const [showVariants, setShowVariants] = useState(false);
   const { addToCart, removeFromCart, cartItems } = useCart();
 
@@ -80,7 +81,11 @@ export function MenuRow({ items, restaurantId }: MenuRowProps) {
             {isGroup ? `From ${formatCurrency(lowestPrice)}` : formatCurrency(baseItem.price)}
           </span>
           
-          {!isAvailable ? (
+          {isClosed ? (
+            <button disabled className="relative flex items-center justify-center px-3 py-1.5 rounded-full border border-divider text-secondary cursor-not-allowed bg-surface">
+              <span className="text-[11px] font-medium uppercase tracking-wider">Closed</span>
+            </button>
+          ) : !isAvailable ? (
             <button disabled className="relative flex items-center justify-center px-3 py-1.5 rounded-full border border-divider text-secondary cursor-not-allowed bg-surface">
               <span className="text-[11px] font-medium uppercase tracking-wider">Unavailable</span>
             </button>

@@ -126,6 +126,13 @@ export default function RestaurantPage() {
             {restaurant.description}
           </p>
 
+          {!restaurant.isActive && (
+            <div className="bg-error/10 border border-error/20 p-4 rounded-lg mb-8">
+              <h3 className="text-error font-medium">This restaurant is currently closed.</h3>
+              <p className="text-error/80 text-sm mt-1">You can browse the menu, but ordering is temporarily disabled.</p>
+            </div>
+          )}
+
           {/* Tabs */}
           <div className="flex border-b border-divider">
             <button
@@ -226,7 +233,12 @@ export default function RestaurantPage() {
                   });
                   
                   return Array.from(grouped.values()).map((group: any[], idx) => (
-                    <MenuRow key={`${group[0].name}-${idx}`} items={group} restaurantId={restaurant.id} />
+                    <MenuRow 
+                      key={`${group[0].name}-${idx}`} 
+                      items={group} 
+                      restaurantId={restaurant.id} 
+                      isClosed={!restaurant.isActive}
+                    />
                   ));
                 })()}
               </div>

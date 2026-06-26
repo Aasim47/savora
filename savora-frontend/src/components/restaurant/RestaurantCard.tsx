@@ -17,14 +17,8 @@ export function RestaurantCard({ restaurant, isFeatured }: RestaurantProps) {
   const image = restaurant.imageUrl || "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop";
   const isOpen = restaurant.isActive !== false; // Default to open if not explicitly false
 
-  return (
-    <Link 
-      href={`/restaurant/${restaurant.id}`}
-      className={cn(
-        "group relative overflow-hidden bg-surface cursor-pointer rounded-[14px] block",
-        isFeatured ? "md:col-span-2 aspect-[16/9] md:aspect-[21/9]" : "col-span-1 aspect-[4/3]"
-      )}
-    >
+  const content = (
+    <>
       <img 
         src={image} 
         alt={restaurant.name}
@@ -59,6 +53,17 @@ export function RestaurantCard({ restaurant, isFeatured }: RestaurantProps) {
           {restaurant.name}
         </h2>
       </div>
+    </>
+  );
+
+  const wrapperClass = cn(
+    "group relative overflow-hidden bg-surface cursor-pointer rounded-[14px] block",
+    isFeatured ? "md:col-span-2 aspect-[16/9] md:aspect-[21/9]" : "col-span-1 aspect-[4/3]"
+  );
+
+  return (
+    <Link href={`/restaurant/${restaurant.id}`} className={wrapperClass}>
+      {content}
     </Link>
   );
 }
