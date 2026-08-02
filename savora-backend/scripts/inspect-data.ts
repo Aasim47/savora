@@ -1,34 +1,24 @@
 import prisma from "../src/config/prisma";
 
 async function main() {
-  const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: true,
-      createdAt: true,
+  const restaurant = await prisma.restaurant.findFirst({
+    where: { name: { contains: "Arnapurna", mode: "insensitive" } },
+    include: {
+      categories: {
+        include: { menuItems: true },
+      },
     },
   });
 
-  const ordersCount = await prisma.order.count();
-  const orderItemsCount = await prisma.orderItem.count();
-  const reviewsCount = await prisma.review.count();
-  const cartsCount = await prisma.cart.count();
-
-  console.log("=== CURRENT DATABASE STATE ===");
-  console.log(`Total Users: ${users.length}`);
-  console.table(users);
-  console.log(`Total Orders: ${ordersCount}`);
-  console.log(`Total OrderItems: ${orderItemsCount}`);
-  console.log(`Total Reviews: ${reviewsCount}`);
-  console.log(`Total Carts: ${cartsCount}`);
+  console.log("Restaurant:", restaurant?.name, restaurant?.id);
+  restaurant?.categories.forEach((cat) => {
+    console.log(`\nCategory: ${cat.name} (${cat.menuItems.length} items)`);
+    cat.menuItems.forEach((m) => {
+      console.log(` - ${m.name} | ${m.portionSize || "Standard"} | ₹${m.price}`);
+    });
+  });
 }
 
 main()
-  .catch((e) => {
-    console.error("Error inspecting database:", e);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());
