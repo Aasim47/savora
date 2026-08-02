@@ -20,22 +20,22 @@ export const loginSchema = z.object({
 export const createRestaurantSchema = z.object({
   body: z.object({
     name: z.string().min(2).max(200),
-    description: z.string().max(2000).optional(),
-    phone: z.string().regex(/^\+?[1-9]\d{1,14}$/).optional(),
-    address: z.string().max(500).optional(),
-    openingTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
-    closingTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/).optional(),
-    fssaiLicenseNumber: z.string().max(50).optional(),
-    gstNumber: z.string().max(50).optional(),
-    legalBusinessName: z.string().max(200).optional(),
-    registeredAddress: z.string().max(500).optional(),
+    description: z.string().max(2000).optional().nullable().or(z.literal("")),
+    phone: z.string().optional().nullable().or(z.literal("")),
+    address: z.string().max(500).optional().nullable().or(z.literal("")),
+    openingTime: z.string().max(50).optional().nullable().or(z.literal("")),
+    closingTime: z.string().max(50).optional().nullable().or(z.literal("")),
+    fssaiLicenseNumber: z.string().max(50).optional().nullable().or(z.literal("")),
+    gstNumber: z.string().max(50).optional().nullable().or(z.literal("")),
+    legalBusinessName: z.string().max(200).optional().nullable().or(z.literal("")),
+    registeredAddress: z.string().max(500).optional().nullable().or(z.literal("")),
   }),
 });
 
 export const updateRestaurantSchema = z.object({
   params: z.object({ id: z.string().uuid() }),
   body: createRestaurantSchema.shape.body.partial().extend({
-    isActive: z.boolean().optional(),
+    isActive: z.union([z.boolean(), z.string().transform((val) => val === "true")]).optional(),
   }),
 });
 

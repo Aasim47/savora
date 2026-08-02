@@ -24,8 +24,8 @@ const sanitizeComplianceFields = (data: Record<string, any>) => {
 };
 
 export const createRestaurant = [
-  validate(createRestaurantSchema),
   upload.single("image"),
+  validate(createRestaurantSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const data = { ...req.body };
     delete data.image;
@@ -79,11 +79,14 @@ export const getRestaurantById = [
 ];
 
 export const updateRestaurant = [
-  validate(updateRestaurantSchema),
   upload.single("image"),
+  validate(updateRestaurantSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const data = { ...req.body };
     delete data.image;
+    if (data.isActive !== undefined) {
+      data.isActive = data.isActive === "true" || data.isActive === true;
+    }
     sanitizeComplianceFields(data);
 
     if (req.file) {
