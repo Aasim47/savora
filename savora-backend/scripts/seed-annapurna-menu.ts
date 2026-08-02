@@ -134,6 +134,67 @@ const menuData: CategoryDef[] = [
       { name: "Mutton Kadai", price: 380, portionSize: "Full" },
     ],
   },
+  {
+    name: "Sea Food",
+    items: [
+      { name: "Fish Curry", halfPrice: 60, fullPrice: 120 },
+      { name: "Fish Masala", halfPrice: 60, fullPrice: 120 },
+      { name: "Fish Fry", price: 100, portionSize: "Full" },
+      { name: "Prawns Curry", halfPrice: 230, fullPrice: 340 },
+      { name: "Prawns Masala", halfPrice: 230, fullPrice: 340 },
+      { name: "Crab Fry", halfPrice: 200, fullPrice: 300 },
+      { name: "Crab Masala", halfPrice: 220, fullPrice: 330 },
+    ],
+  },
+  {
+    name: "Biryani & Rice",
+    items: [
+      { name: "Jeera Rice", price: 100, portionSize: "Full" },
+      { name: "Tomato Rice", price: 100, portionSize: "Full" },
+      { name: "Lemon Rice", price: 100, portionSize: "Full" },
+      { name: "Veg Fried Rice", halfPrice: 80, fullPrice: 120 },
+      { name: "Egg Fried Rice", halfPrice: 90, fullPrice: 130 },
+      { name: "Chicken Fried Rice", halfPrice: 100, fullPrice: 150 },
+      { name: "Veg Mix Pulao", price: 160, portionSize: "Full" },
+      { name: "Mix Veg Fried Rice", price: 150, portionSize: "Full" },
+      { name: "Mixed Non Veg Fried Rice", price: 200, portionSize: "Full" },
+      { name: "Prawns Fried Rice", price: 180, portionSize: "Full" },
+      { name: "Veg Biryani", halfPrice: 120, fullPrice: 180 },
+      { name: "Chicken Dum Biryani", halfPrice: 150, fullPrice: 220 },
+      { name: "Chicken Fried Biryani", halfPrice: 150, fullPrice: 220 },
+      { name: "Mutton Biryani", halfPrice: 240, fullPrice: 360 },
+    ],
+  },
+  {
+    name: "Meals",
+    items: [
+      { name: "Veg Meal", price: 80, portionSize: "Full" },
+      { name: "Mushroom Meal", price: 120, portionSize: "Full" },
+      { name: "Fish Meal", price: 130, portionSize: "Full" },
+      { name: "Paneer Meal", price: 140, portionSize: "Full" },
+      { name: "Chicken Meal", price: 150, portionSize: "Full" },
+      { name: "Prawn Meal", price: 200, portionSize: "Full" },
+      { name: "Mutton Meal", price: 240, portionSize: "Full" },
+    ],
+  },
+  {
+    name: "Breakfast, Breads & Sides",
+    items: [
+      { name: "Papad Fry", price: 20, portionSize: "Full" },
+      { name: "Papad Dry", price: 20, portionSize: "Full" },
+      { name: "Masala Papad", price: 30, portionSize: "Full" },
+      { name: "Tawa Roti", price: 8, portionSize: "1 Pc" },
+      { name: "Paratha", price: 20, portionSize: "1 Pc" },
+      { name: "Lachchha Paratha", price: 35, portionSize: "1 Pc" },
+      { name: "Cold Drink", price: 20, portionSize: "Can / Bottle" },
+      { name: "Masala Cold Drink", price: 40, portionSize: "Glass" },
+      { name: "Masala Soda", price: 40, portionSize: "Glass" },
+      { name: "Green Salad", price: 60, portionSize: "Full" },
+      { name: "Raitha Salad", price: 70, portionSize: "Full" },
+      { name: "Onion Salad", price: 40, portionSize: "Full" },
+      { name: "Dahi Salad", price: 50, portionSize: "Full" },
+    ],
+  },
 ];
 
 async function main() {
@@ -158,7 +219,7 @@ async function main() {
   await prisma.category.deleteMany({
     where: { restaurantId: restaurant.id },
   });
-  console.log("✓ Cleaned existing items for fresh individual split import.");
+  console.log("✓ Cleaned existing items for fresh bulk import.");
 
   let totalItemsCreated = 0;
 
