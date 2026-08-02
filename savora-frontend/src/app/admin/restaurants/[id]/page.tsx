@@ -187,9 +187,12 @@ export default function RestaurantDetailPage() {
 
       resetMenuState();
       fetchRestaurant();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("Failed to save menu items");
+      const msg = error.response?.data?.message || 
+        (Array.isArray(error.response?.data?.errors) ? error.response.data.errors.map((e: any) => e.message).join(", ") : null) || 
+        "Failed to save menu items";
+      alert(msg);
     } finally {
       setIsSavingMenu(false);
     }

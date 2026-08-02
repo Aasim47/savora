@@ -65,18 +65,33 @@ export const createMenuItemSchema = z.object({
   body: z.object({
     restaurantId: z.string().uuid(),
     categoryId: z.string().uuid(),
-    name: z.string().min(2).max(200),
-    description: z.string().max(2000).optional(),
-    portionSize: z.string().max(100).optional(),
-    price: z.number().positive("Price must be positive"),
-    imageUrl: z.string().url().optional(),
-    available: z.boolean().optional(),
+    name: z.string().min(1).max(200),
+    description: z.string().max(2000).optional().nullable().or(z.literal("")),
+    portionSize: z.string().max(100).optional().nullable().or(z.literal("")),
+    price: z.preprocess(
+      (val) => (typeof val === "string" ? parseFloat(val) : val),
+      z.number().positive("Price must be positive")
+    ),
+    imageUrl: z.string().optional().nullable().or(z.literal("")),
+    available: z.union([z.boolean(), z.string().transform((val) => val === "true")]).optional(),
   }),
 });
 
 export const updateMenuItemSchema = z.object({
   params: z.object({ id: z.string().uuid() }),
-  body: createMenuItemSchema.shape.body.partial(),
+  body: z.object({
+    restaurantId: z.string().uuid().optional(),
+    categoryId: z.string().uuid().optional(),
+    name: z.string().min(1).max(200).optional(),
+    description: z.string().max(2000).optional().nullable().or(z.literal("")),
+    portionSize: z.string().max(100).optional().nullable().or(z.literal("")),
+    price: z.preprocess(
+      (val) => (typeof val === "string" ? parseFloat(val) : val),
+      z.number().positive("Price must be positive")
+    ).optional(),
+    imageUrl: z.string().optional().nullable().or(z.literal("")),
+    available: z.union([z.boolean(), z.string().transform((val) => val === "true")]).optional(),
+  }),
 });
 
 export const menuItemIdSchema = z.object({
