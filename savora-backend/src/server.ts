@@ -51,7 +51,14 @@ app.use(express.json());
 app.use(helmet());
 app.use("/api", apiLimiter);
 
-// Local uploads no longer used
+app.get("/", (req, res) => {
+  res.json({
+    status: "online",
+    message: "Bhojanwale Backend API is running successfully 🚀",
+    frontend: "https://bhojanwale.in",
+    timestamp: new Date().toISOString(),
+  });
+});
 
 import authRoutes from "./routes/auth.routes";
 
