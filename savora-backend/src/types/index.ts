@@ -39,6 +39,7 @@ export interface CreateRestaurantInput {
   gstNumber?: string;
   legalBusinessName?: string;
   registeredAddress?: string;
+  upiId?: string;
   imageUrl?: string;
 }
 

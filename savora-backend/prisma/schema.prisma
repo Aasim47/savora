@@ -54,6 +54,7 @@ model Restaurant {
   gstNumber          String?
   legalBusinessName  String?
   registeredAddress  String?
+  upiId              String?
 
   categories Category[]
   menuItems  MenuItem[]
@@ -148,6 +149,7 @@ model Order {
   restaurantGstNumber         String?
   restaurantLegalName         String?
   restaurantRegisteredAddress String?
+  restaurantUpiId             String?
 
   items     OrderItem[]
   review    Review?

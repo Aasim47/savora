@@ -30,6 +30,7 @@ export const createOrder = async (
       gstNumber: true,
       legalBusinessName: true,
       registeredAddress: true,
+      upiId: true,
     }
   });
 
@@ -60,6 +61,7 @@ export const createOrder = async (
       restaurantGstNumber: restaurant?.gstNumber ?? null,
       restaurantLegalName: restaurant?.legalBusinessName ?? null,
       restaurantRegisteredAddress: restaurant?.registeredAddress ?? null,
+      restaurantUpiId: restaurant?.upiId ?? null,
       items: {
         create: cart.items.map((item: any) => ({
           menuItemId: item.menuItemId,

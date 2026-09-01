@@ -16,7 +16,7 @@ import apiCache from "../utils/cache";
 const upload = multer({ storage: multer.memoryStorage() });
 
 const sanitizeComplianceFields = (data: Record<string, any>) => {
-  for (const key of ["fssaiLicenseNumber", "gstNumber", "legalBusinessName", "registeredAddress"]) {
+  for (const key of ["fssaiLicenseNumber", "gstNumber", "legalBusinessName", "registeredAddress", "upiId"]) {
     if (data[key] !== undefined && typeof data[key] === "string" && data[key].trim() === "") {
       data[key] = null;
     }

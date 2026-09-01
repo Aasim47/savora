@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import api, { TOKEN_KEY_CUSTOMER } from "@/lib/axios";
 import { formatCurrency } from "@/utils/currency";
 import { io } from "socket.io-client";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function ReceiptPage() {
   const { id } = useParams();
@@ -66,6 +67,12 @@ export default function ReceiptPage() {
 
   if (loading) return <div className="p-10 text-center font-mono text-sm">Loading receipt...</div>;
   if (!order) return <div className="p-10 text-center font-mono text-sm">Order not found</div>;
+
+  const upiId = order.restaurantUpiId || order.restaurant?.upiId || "bhojanwale@okaxis";
+  const payeeName = order.restaurantLegalName || order.restaurant?.name || "Bhojanwale Restaurant";
+  const orderAmount = Number(order.totalAmount || 0).toFixed(2);
+  const shortOrderId = order.id ? order.id.split('-')[0] : "";
+  const upiPaymentUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${orderAmount}&cu=INR&tn=${encodeURIComponent(`Bill Order ${shortOrderId}`)}`;
 
   return (
     <>
@@ -130,7 +137,7 @@ export default function ReceiptPage() {
         <div className="text-[11px] mb-4 space-y-1">
           <div className="flex justify-between">
             <span>Order No:</span>
-            <span className="font-bold">{order.id.split('-')[0]}</span>
+            <span className="font-bold">{shortOrderId}</span>
           </div>
           <div className="flex justify-between">
             <span>Date:</span>
@@ -144,6 +151,14 @@ export default function ReceiptPage() {
             <span>Status:</span>
             <span className="uppercase">{order.status}</span>
           </div>
+          {order.paymentStatus && (
+            <div className="flex justify-between">
+              <span>Payment:</span>
+              <span className={`font-semibold ${order.paymentStatus === 'PAID' ? 'text-green-700' : 'text-amber-700'}`}>
+                {order.paymentStatus}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="border-t-2 border-dashed border-gray-300 my-4"></div>
@@ -169,7 +184,7 @@ export default function ReceiptPage() {
         <div className="border-t-2 border-dashed border-gray-300 my-4"></div>
 
         {/* Totals */}
-        <div className="text-[12px] space-y-1 mb-6">
+        <div className="text-[12px] space-y-1 mb-4">
           <div className="flex justify-between mt-2">
             <span>SUBTOTAL:</span>
             <span>{formatCurrency(order.totalAmount - (order.deliveryFee || 0))}</span>
@@ -184,7 +199,35 @@ export default function ReceiptPage() {
           </div>
         </div>
 
-        <div className="text-center text-[10px] text-gray-600 mt-8 mb-4">
+        {/* Dynamic UPI Payment QR Code Section */}
+        <div className="border-t-2 border-dashed border-gray-300 pt-4 pb-2 my-4 text-center">
+          <p className="text-[11px] font-bold uppercase tracking-wider mb-2">
+            Scan & Pay with UPI
+          </p>
+
+          <div className="bg-white p-2.5 inline-block border-2 border-black rounded-lg my-1 shadow-xs">
+            <QRCodeSVG
+              value={upiPaymentUri}
+              size={135}
+              level="M"
+              includeMargin={false}
+            />
+          </div>
+
+          <div className="mt-2 space-y-0.5">
+            <p className="text-[12px] font-bold text-black">
+              Amount: {formatCurrency(order.totalAmount)}
+            </p>
+            <p className="text-[9px] text-gray-600 font-medium">
+              GPay • PhonePe • Paytm • BHIM • Cred
+            </p>
+            <p className="text-[9px] text-gray-500 truncate max-w-[240px] mx-auto">
+              UPI: {upiId}
+            </p>
+          </div>
+        </div>
+
+        <div className="text-center text-[10px] text-gray-600 mt-4 mb-4">
           <p className="border-b border-gray-300 pb-2 mb-2 italic">Delivery Rule: First 2 km free, ₹10/km after</p>
           <p>Thank you for your order!</p>
           <p>Powered by Bhojanwale</p>

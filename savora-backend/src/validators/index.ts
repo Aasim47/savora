@@ -29,6 +29,7 @@ export const createRestaurantSchema = z.object({
     gstNumber: z.string().max(50).optional().nullable().or(z.literal("")),
     legalBusinessName: z.string().max(200).optional().nullable().or(z.literal("")),
     registeredAddress: z.string().max(500).optional().nullable().or(z.literal("")),
+    upiId: z.string().max(100).optional().nullable().or(z.literal("")),
   }),
 });
 

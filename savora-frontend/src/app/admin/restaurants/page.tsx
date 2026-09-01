@@ -13,7 +13,7 @@ export default function AdminRestaurantsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newRestaurant, setNewRestaurant] = useState({
     name: "", description: "", imageUrl: "", phone: "", address: "", openingTime: "", closingTime: "",
-    fssaiLicenseNumber: "", gstNumber: "", legalBusinessName: "", registeredAddress: ""
+    fssaiLicenseNumber: "", gstNumber: "", legalBusinessName: "", registeredAddress: "", upiId: ""
   });
   const [complianceOpen, setComplianceOpen] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -62,6 +62,7 @@ export default function AdminRestaurantsPage() {
       formData.append("gstNumber", newRestaurant.gstNumber);
       formData.append("legalBusinessName", newRestaurant.legalBusinessName);
       formData.append("registeredAddress", newRestaurant.registeredAddress);
+      formData.append("upiId", newRestaurant.upiId);
       
       if (imageFile) {
         formData.append("image", imageFile);
@@ -79,7 +80,7 @@ export default function AdminRestaurantsPage() {
       setIsModalOpen(false);
       setEditingId(null);
       setImageFile(null);
-      setNewRestaurant({ name: "", description: "", imageUrl: "", phone: "", address: "", openingTime: "", closingTime: "", fssaiLicenseNumber: "", gstNumber: "", legalBusinessName: "", registeredAddress: "" });
+      setNewRestaurant({ name: "", description: "", imageUrl: "", phone: "", address: "", openingTime: "", closingTime: "", fssaiLicenseNumber: "", gstNumber: "", legalBusinessName: "", registeredAddress: "", upiId: "" });
       fetchRestaurants();
     } catch (error: any) {
       console.error("Failed to save restaurant", error);
@@ -93,7 +94,7 @@ export default function AdminRestaurantsPage() {
   const handleEditClick = (restaurant: any) => {
     setEditingId(restaurant.id);
     setImageFile(null);
-    const hasCompliance = restaurant.fssaiLicenseNumber || restaurant.gstNumber || restaurant.legalBusinessName || restaurant.registeredAddress;
+    const hasCompliance = restaurant.fssaiLicenseNumber || restaurant.gstNumber || restaurant.legalBusinessName || restaurant.registeredAddress || restaurant.upiId;
     setComplianceOpen(!!hasCompliance);
     setNewRestaurant({
       name: restaurant.name || "",
@@ -106,7 +107,8 @@ export default function AdminRestaurantsPage() {
       fssaiLicenseNumber: restaurant.fssaiLicenseNumber || "",
       gstNumber: restaurant.gstNumber || "",
       legalBusinessName: restaurant.legalBusinessName || "",
-      registeredAddress: restaurant.registeredAddress || ""
+      registeredAddress: restaurant.registeredAddress || "",
+      upiId: restaurant.upiId || ""
     });
     setIsModalOpen(true);
   };
@@ -115,7 +117,7 @@ export default function AdminRestaurantsPage() {
     setEditingId(null);
     setImageFile(null);
     setComplianceOpen(false);
-    setNewRestaurant({ name: "", description: "", imageUrl: "", phone: "", address: "", openingTime: "", closingTime: "", fssaiLicenseNumber: "", gstNumber: "", legalBusinessName: "", registeredAddress: "" });
+    setNewRestaurant({ name: "", description: "", imageUrl: "", phone: "", address: "", openingTime: "", closingTime: "", fssaiLicenseNumber: "", gstNumber: "", legalBusinessName: "", registeredAddress: "", upiId: "" });
     setIsModalOpen(true);
   };
 
@@ -284,6 +286,11 @@ export default function AdminRestaurantsPage() {
                     <div>
                       <label className="block text-xs font-medium uppercase tracking-widest text-secondary mb-1">Registered Address</label>
                       <textarea value={newRestaurant.registeredAddress} onChange={e => setNewRestaurant({...newRestaurant, registeredAddress: e.target.value})} className="w-full bg-base border border-divider rounded-lg px-3 py-2 text-sm text-primary outline-none focus:border-accent" rows={2} placeholder="If different from delivery/operating address" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium uppercase tracking-widest text-secondary mb-1">UPI ID (VPA for Bill QR Payments)</label>
+                      <input type="text" value={newRestaurant.upiId} onChange={e => setNewRestaurant({...newRestaurant, upiId: e.target.value})} className="w-full bg-base border border-divider rounded-lg px-3 py-2 text-sm text-primary outline-none focus:border-accent" placeholder="e.g. restaurant@okhdfcbank or merchant@upi" />
+                      <p className="text-[11px] text-secondary mt-1">Used to generate dynamic QR code with order amount on printed bills and receipts.</p>
                     </div>
                   </div>
                 )}
